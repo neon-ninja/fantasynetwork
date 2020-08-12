@@ -27,19 +27,19 @@ def make_safe(s):
 for item in items:
     t = tabLookup[item["ChildId"]]
     top_level = make_safe(t["Name"])
-    print(f"mkdir '{top_level}'")
+    print(f"mkdir -p '{top_level}'")
     for child in t["Items"]:
         if child["Type"] == "collection":
             child = tabLookup[child["ChildId"]]
             second_level = make_safe(child["Name"])
-            print(f"mkdir '{os.path.join(top_level, second_level)}'")
+            print(f"mkdir -p '{os.path.join(top_level, second_level)}'")
             for subchild in child["Items"]:
                 v = videoLookup[subchild["ChildId"]]
                 for f in v["Files"]:
                     if f["Type"] == "1080":
-                        print(f"wget '{f['URL']}' -O '{os.path.join(top_level, second_level, make_safe(v['Title']))}.mp4'")
+                        print(f"wget -N '{f['URL']}' -O '{os.path.join(top_level, second_level, make_safe(v['Title']))}.mp4'")
         else:
             v = videoLookup[child["ChildId"]]
             for f in v["Files"]:
                 if f["Type"] == "1080":
-                    print(f"wget '{f['URL']}' -O '{os.path.join(top_level, make_safe(v['Title']))}.mp4'")
+                    print(f"wget -N '{f['URL']}' -O '{os.path.join(top_level, make_safe(v['Title']))}.mp4'")
